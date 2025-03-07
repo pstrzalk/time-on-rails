@@ -22,8 +22,22 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="bg-gray-900 text-white">
+    <nav class="bg-gray-100 dark:bg-gray-800 py-3 shadow">
+      <div class="container mx-auto flex items-center justify-between">
+        <!-- Brand or Logo -->
+        <div class="text-xl font-bold text-gray-900 dark:text-gray-100">
+          Time Tracking
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="space-x-6">
+          <a href="<%= works_path %>" class="text-gray-700 dark:text-gray-200 hover:underline">Works</a>
+          <a href="<%= projects_path %>" class="text-gray-700 dark:text-gray-200 hover:underline">Projects</a>
+        </div>
+      </div>
+    </nav>
+    <main class="container mx-auto mt-28 flex">
       <%= yield %>
     </main>
   </body>
