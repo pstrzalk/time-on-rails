@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  started: 2025-03-05 10:21:51
+  finished: 2025-03-05 10:21:51
+  project: one
+
+two:
+  started: 2025-03-05 10:21:51
+  finished: 2025-03-05 10:21:51
+  project: two
