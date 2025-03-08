@@ -17,7 +17,7 @@ class WorksControllerTest < ActionDispatch::IntegrationTest
 
   test "should create work" do
     assert_difference("Work.count") do
-      post works_url, params: { work: { finished: @work.finished, project_id: @work.project_id, started: @work.started } }
+      post works_url, params: { work: { project_id: @work.project_id, started_at: @work.started_at } }
     end
 
     assert_redirected_to work_url(Work.last)
@@ -34,7 +34,7 @@ class WorksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update work" do
-    patch work_url(@work), params: { work: { finished: @work.finished, project_id: @work.project_id, started: @work.started } }
+    patch work_url(@work), params: { work: { project_id: @work.project_id, started_at: @work.started_at } }
     assert_redirected_to work_url(@work)
   end
 

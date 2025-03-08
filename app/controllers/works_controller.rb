@@ -12,7 +12,7 @@ class WorksController < ApplicationController
 
   # GET /works/new
   def new
-    @work = Work.new
+    @work = Work.new(date: Date.current)
   end
 
   # GET /works/1/edit
@@ -93,6 +93,6 @@ class WorksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def work_params
-      params.expect(work: [ :duration, :description, :project_id ])
+      params.expect(work: [ :duration, :description, :date, :project_id ])
     end
 end

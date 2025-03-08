@@ -14,9 +14,8 @@ class WorksTest < ApplicationSystemTestCase
     visit works_url
     click_on "New work"
 
-    fill_in "Finished", with: @work.finished
     fill_in "Project", with: @work.project_id
-    fill_in "Started", with: @work.started
+    fill_in "Started At", with: @work.started_at
     click_on "Create Work"
 
     assert_text "Work was successfully created"
@@ -27,9 +26,8 @@ class WorksTest < ApplicationSystemTestCase
     visit work_url(@work)
     click_on "Edit this work", match: :first
 
-    fill_in "Finished", with: @work.finished.to_s
     fill_in "Project", with: @work.project_id
-    fill_in "Started", with: @work.started.to_s
+    fill_in "Started At", with: @work.started_at.to_s
     click_on "Update Work"
 
     assert_text "Work was successfully updated"

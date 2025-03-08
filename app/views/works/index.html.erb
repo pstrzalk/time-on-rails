@@ -16,11 +16,11 @@
         <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
           <%= render work %>
           <div class="w-auto flex flex-row space-x-4 space-y-2">
-            <% if !work.started? %>
+            <% if !work.started_at? %>
               <%= link_to "Start", start_work_path(work), class: "w-full sm:w-auto text-black text-center rounded-md px-6 py-3 bg-green-300 hover:bg-green-100 inline-block font-medium", data: { turbo_method: "post" } %>
             <% end %>
 
-            <% if work.started? %>
+            <% if work.started_at? %>
               <%= link_to "Stop", stop_work_path(work), class: "w-full sm:w-auto text-black text-center rounded-md px-6 py-3 bg-red-300 hover:bg-red-100 inline-block font-medium", data: { turbo_method: "post" } %>
             <% end %>
 
