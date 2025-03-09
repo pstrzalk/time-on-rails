@@ -23,22 +23,33 @@
   </head>
 
   <body class="bg-gray-900 text-white">
-    <nav class="bg-gray-100 dark:bg-gray-800 py-3 shadow">
-      <div class="container mx-auto flex items-center justify-between">
-        <!-- Brand or Logo -->
-        <div class="text-xl font-bold text-gray-900 dark:text-gray-100">
-          Time Tracking
-        </div>
+    <main class="full">
+      <% if current_user %>
+        <nav class="bg-gray-100 dark:bg-gray-800 py-3 shadow mb-8">
+          <div class="px-4 md:px-8 mx-auto flex items-center justify-between">
+            <div class="text-xl font-bold text-gray-900 dark:text-gray-100">Time Tracking</div>
 
-        <!-- Navigation Links -->
-        <div class="space-x-6">
-          <a href="<%= works_path %>" class="text-gray-700 dark:text-gray-200 hover:underline">Works</a>
-          <a href="<%= projects_path %>" class="text-gray-700 dark:text-gray-200 hover:underline">Projects</a>
+            <div class="space-x-6">
+              <a href="<%= works_path %>" class="text-gray-700 dark:text-gray-200 hover:underline">Works</a>
+              <a href="<%= projects_path %>" class="text-gray-700 dark:text-gray-200 hover:underline">Projects</a>
+              <%= link_to "Log out", destroy_user_session_path, data: { 'turbo-method' => :delete }, class: "text-gray-700 dark:text-gray-200 hover:underline" %>
+            </div>
+          </div>
+        </nav>
+      <% end %>
+
+      <% if notice.present? %>
+        <div class="absolute top-16 left-16 right-16 text-center align-middle"
+           id="notice"
+           data-controller="notices"
+           data-action="click->notices#hide">
+          <div class="w-full md:w-3xl mx-auto bg-green-200 text-black p-3 font-medium rounded-md cursor-pointer"><%= notice %></div>
         </div>
+      <% end %>
+
+      <div class="min-h-full px-4 md:px-8">
+        <%= yield %>
       </div>
-    </nav>
-    <main class="container mx-auto mt-28 flex">
-      <%= yield %>
     </main>
   </body>
 </html>

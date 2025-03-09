@@ -1,9 +1,10 @@
 class WorksController < ApplicationController
   before_action :set_work, only: %i[ show edit update start stop destroy ]
+  before_action :authenticate_user!
 
   # GET /works or /works.json
   def index
-    @works = Work.all
+    @works = Work.where(user: current_user)
   end
 
   # GET /works/1 or /works/1.json
@@ -13,6 +14,9 @@ class WorksController < ApplicationController
   # GET /works/new
   def new
     @work = Work.new(date: Date.current)
+    @work.user = current_user
+
+    @project_options = Project.where(user: current_user).map { |p| [ p.name, p.id ] }
   end
 
   # GET /works/1/edit
@@ -22,13 +26,18 @@ class WorksController < ApplicationController
   # POST /works or /works.json
   def create
     @work = Work.new(work_params)
+    @work.user = current_user
 
     respond_to do |format|
       if @work.save
         format.html { redirect_to works_path, notice: "Work was successfully created." }
         format.json { render :show, status: :created, location: @work }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html {
+          @project_options = Project.where(user: current_user).map { |p| [ p.name, p.id ] }
+
+          render :new, status: :unprocessable_entity
+        }
         format.json { render json: @work.errors, status: :unprocessable_entity }
       end
     end
@@ -88,7 +97,7 @@ class WorksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_work
-      @work = Work.find(params.expect(:id))
+      @work = Work.where(user: current_user).find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.
