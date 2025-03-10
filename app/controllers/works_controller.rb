@@ -21,6 +21,7 @@ class WorksController < ApplicationController
 
   # GET /works/1/edit
   def edit
+    @project_options = Project.where(user: current_user).map { |p| [ p.name, p.id ] }
   end
 
   # POST /works or /works.json
@@ -50,7 +51,11 @@ class WorksController < ApplicationController
         format.html { redirect_to works_path, notice: "Work was successfully updated." }
         format.json { render :show, status: :ok, location: @work }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html {
+          @project_options = Project.where(user: current_user).map { |p| [ p.name, p.id ] }
+
+          render :edit, status: :unprocessable_entity
+        }
         format.json { render json: @work.errors, status: :unprocessable_entity }
       end
     end
@@ -64,7 +69,7 @@ class WorksController < ApplicationController
         format.html { redirect_to works_path, notice: "Work was successfully started." }
         format.json { render :show, status: :ok, location: @work }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { redirect_to works_path, notice: "Work was not started" }
         format.json { render json: @work.errors, status: :unprocessable_entity }
       end
     end
@@ -78,7 +83,7 @@ class WorksController < ApplicationController
         format.html { redirect_to works_path, notice: "Work was successfully stopped." }
         format.json { render :show, status: :ok, location: @work }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { redirect_to works_path, notice: "Work was not started" }
         format.json { render json: @work.errors, status: :unprocessable_entity }
       end
     end
