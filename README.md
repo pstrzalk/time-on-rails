@@ -1,24 +1,8 @@
-# README
+# Time on Rails
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+I need a tool for tracking time. I really love Harvest and I've used it for the last ~12 years. But I needed to add a third project, which is not covered in the free plan.
 
-Things you may want to cover:
+So I decided to build my own.
+It's simple, it's straighforward and flawed in many ways. But it works and is enough for now.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Use it if you need similar functionality.
