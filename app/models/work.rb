@@ -4,6 +4,10 @@ class Work < ApplicationRecord
 
   validates :date, presence: true
 
+  def in_progress?
+    started_at.present?
+  end
+
   def start
     return if started_at
 
@@ -11,7 +15,7 @@ class Work < ApplicationRecord
   end
 
   def stop
-    self.duration = duration + seconds_since_started
+    self.duration = total_time
     self.started_at = nil
   end
 
@@ -22,16 +26,18 @@ class Work < ApplicationRecord
   end
 
   def time_description
-    full_time = duration + seconds_since_started
-
-    hours = full_time / 3600
-    minutes = (full_time  - hours * 3600) / 60
-    seconds = (full_time - hours * 3600 - minutes * 60) % 60
+    hours = total_time / 3600
+    minutes = (total_time  - hours * 3600) / 60
+    seconds = (total_time - hours * 3600 - minutes * 60) % 60
 
     [
       ("#{hours} hours" if hours.positive?),
       ("#{minutes} minutes" if minutes.positive?),
       ("#{seconds} seconds" if seconds.positive?)
     ].compact.join(" ")
+  end
+
+  def total_time
+    duration.to_i + seconds_since_started
   end
 end

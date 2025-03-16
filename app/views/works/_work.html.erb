@@ -1,7 +1,13 @@
-<div id="<%= dom_id work %>" class="w-full sm:w-auto my-5 space-y-5">
-  <span class="font-bold">Project:</span> <%= work.project.name if work.project_id %><br />
-  <span class="font-bold">Date:</span> <%= work.date.strftime("%d-%m-%Y") %><br />
-  <span class="font-bold">Time used:</span> <%= work.time_description %><br />
-  <span class="font-bold">In Progress:</span> <%= work.started_at.present? ? 'Yes' : 'No' %><br />
-  <span class="font-bold">Description:</span> <%= work.description %>
+<div id="<%= dom_id work %>" class="w-full flex mt-6">
+  <div class="w-1/2">
+    <span class="font-bold">Project:</span> <%= work.project.name if work.project_id %><br />
+    <span class="font-bold">Date:</span> <%= work.date.strftime("%d-%m-%Y") %><br />
+    <span class="font-bold">Description:</span> <%= work.description %>
+  </div>
+  <div class="w-1/2">
+    <span class="font-bold">Time used:</span> <%= work.time_description %><br />
+    <% if work.in_progress? %>
+      <span class="font-bold text-red-300">In Progress</span>
+    <% end%>
+  </div>
 </div>

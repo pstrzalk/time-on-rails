@@ -4,7 +4,7 @@ class WorksController < ApplicationController
 
   # GET /works or /works.json
   def index
-    @works = Work.where(user: current_user)
+    @works = Work.where(user: current_user).order(date: :desc)
   end
 
   # GET /works/1 or /works/1.json
@@ -100,13 +100,14 @@ class WorksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_work
-      @work = Work.where(user: current_user).find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def work_params
-      params.expect(work: [ :duration, :description, :date, :project_id ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_work
+    @work = Work.where(user: current_user).find(params.expect(:id))
+  end
+
+  # Only allow a list of trusted parameters through.
+  def work_params
+    params.expect(work: [ :duration, :description, :date, :project_id ])
+  end
 end
