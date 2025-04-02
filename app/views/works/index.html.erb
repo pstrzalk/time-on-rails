@@ -8,18 +8,17 @@
     <% @works.each do |work| %>
       <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
         <%= render work %>
-        <div class="w-auto flex flex-row space-x-4 space-y-2">
+        <div class="w-1/5 flex flex-row space-x-4 space-y-2">
           <% if !work.started_at? %>
             <%= link_to "Start", start_work_path(work), class: "w-full sm:w-auto text-black text-center rounded-md px-6 py-3 bg-green-300 hover:bg-green-100 inline-block font-medium", data: { turbo_method: "post" } %>
           <% end %>
 
           <% if work.started_at? %>
             <%= link_to "Stop", stop_work_path(work), class: "w-full sm:w-auto text-black text-center rounded-md px-6 py-3 bg-red-300 hover:bg-red-100 inline-block font-medium", data: { turbo_method: "post" } %>
+          <% else %>
+            <%= link_to "Edit", edit_work_path(work), class: "w-full sm:w-auto text-black text-center rounded-md px-6 py-3 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+            <%= button_to "Destroy", work, method: :delete, class: "w-full text-white sm:w-auto rounded-md px-6 py-3 bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
           <% end %>
-
-          <%= link_to "Edit", edit_work_path(work), class: "w-full sm:w-auto text-black text-center rounded-md px-6 py-3 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-
-          <%= button_to "Destroy", work, method: :delete, class: "w-full text-white sm:w-auto rounded-md px-6 py-3 bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
         </div>
       </div>
     <% end %>

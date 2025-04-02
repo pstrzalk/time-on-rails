@@ -4,7 +4,7 @@ class WorksController < ApplicationController
 
   # GET /works or /works.json
   def index
-    @works = Work.where(user: current_user).order(date: :desc)
+    @works = Work.where(user: current_user).order(id: :desc)
   end
 
   # GET /works/1 or /works/1.json
@@ -28,6 +28,7 @@ class WorksController < ApplicationController
   def create
     @work = Work.new(work_params)
     @work.user = current_user
+    @work.start unless @work.total_time > 0
 
     respond_to do |format|
       if @work.save
@@ -108,6 +109,19 @@ class WorksController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def work_params
-    params.expect(work: [ :duration, :description, :date, :project_id ])
+    form_params = params.expect(work: [ :description, :duration_hours, :duration_minutes, :duration_seconds, :date, :project_id ])
+
+    if form_params[:duration_hours].present? ||
+       form_params[:duration_minutes].present? ||
+       form_params[:duration_seconds].present?
+      form_params[:duration] = form_params[:duration_hours].to_i * 3600 +
+                               form_params[:duration_minutes].to_i * 60 +
+                               form_params[:duration_seconds].to_i
+    end
+
+    form_params.delete(:duration_hours)
+    form_params.delete(:duration_minutes)
+    form_params.delete(:duration_seconds)
+    form_params
   end
 end

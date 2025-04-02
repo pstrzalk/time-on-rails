@@ -7,18 +7,7 @@
     <% @reports.each do |work| %>
       <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
         <h2 class="font-bold text-xl"><%= work.project.name %></h2>
-        <%
-          hours = work.total_duration / 3600
-          minutes = (work.total_duration  - hours * 3600) / 60
-          seconds = (work.total_duration - hours * 3600 - minutes * 60) % 60
-
-          total_duration = [
-            ("#{hours} hours" if hours.positive?),
-            ("#{minutes} minutes" if minutes.positive?),
-            ("#{seconds} seconds" if seconds.positive?)
-          ].compact.join(" ")
-        %>
-        <p class="text-gray-500 font-medium text-sm"><%= total_duration %></p>
+        <p class="text-gray-500 font-medium text-sm"><%= time_description(work.total_duration) %></p>
       </div>
     <% end %>
   <% else %>
