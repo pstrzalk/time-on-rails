@@ -1,7 +1,7 @@
 <div id="<%= dom_id work %>" class="w-4/5 flex mt-6">
   <div class="w-1/2">
     <span class="font-bold">Project:</span> <%= work.project.name if work.project_id %><br />
-    <span class="font-bold">Date:</span> <%= work.date.strftime("%d-%m-%Y") %><br />
+    <span class="font-bold">Date:</span> <%= work.date.strftime("%A, %d-%m-%Y") %><br />
     <span class="font-bold">Description:</span> <%= work.description %>
   </div>
   <div class="w-1/2">
