@@ -4,7 +4,12 @@ class WorksController < ApplicationController
 
   # GET /works or /works.json
   def index
-    @works = Work.where(user: current_user).order(id: :desc)
+    @project_options = Project.where(user: current_user).map { |p| [ p.name, p.id ] }
+    if params[:project_id].present?
+      @works = Work.where(user: current_user, project_id: params[:project_id]).order(id: :desc)
+    else
+      @works = Work.where(user: current_user).order(id: :desc)
+    end
   end
 
   # GET /works/1 or /works/1.json
