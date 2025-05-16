@@ -33,7 +33,11 @@ class WorksController < ApplicationController
   def create
     @work = Work.new(work_params)
     @work.user = current_user
-    @work.start unless @work.total_time > 0
+
+    if @work.total_time <= 0
+      stop_other_running_works(@work)
+      @work.start
+    end
 
     respond_to do |format|
       if @work.save
@@ -69,6 +73,7 @@ class WorksController < ApplicationController
 
   def start
     respond_to do |format|
+      stop_other_running_works(@work)
       @work.start
 
       if @work.save
@@ -106,6 +111,13 @@ class WorksController < ApplicationController
   end
 
   private
+
+  def stop_other_running_works(current_work)
+    Work.where(user: current_user).where.not(id: current_work.id).where.not(started_at: nil).find_each do |work|
+      work.stop
+      work.save!
+    end
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_work
