@@ -1,5 +1,15 @@
 <div class="flex justify-between items-center">
-  <h1 class="font-bold text-4xl">Report for <%= @month %>/<%= @year %></h1>
+  <h1 class="font-bold text-4xl">Report for <%= Date::MONTHNAMES[@month.to_i] %> <%= @year %></h1>
+
+  <div class="flex items-center space-x-2">
+    <% prev_month = @month.to_i == 1 ? 12 : @month.to_i - 1 %>
+    <% prev_year = @month.to_i == 1 ? @year.to_i - 1 : @year.to_i %>
+    <%= link_to "← Previous", reports_path(month: prev_month, year: prev_year), class: "px-3 py-1 bg-gray-100 text-black rounded hover:bg-gray-300" %>
+
+    <% next_month = @month.to_i == 12 ? 1 : @month.to_i + 1 %>
+    <% next_year = @month.to_i == 12 ? @year.to_i + 1 : @year.to_i %>
+    <%= link_to "Next →", reports_path(month: next_month, year: next_year), class: "px-3 py-1 bg-gray-100 text-black rounded hover:bg-gray-300" %>
+  </div>
 </div>
 
 <div id="works" class="min-w-full space-y-5 mt-8">
