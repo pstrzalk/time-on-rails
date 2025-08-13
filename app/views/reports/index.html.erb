@@ -1,26 +1,72 @@
-<div class="flex justify-between items-center">
-  <h1 class="font-bold text-4xl">Report for <%= Date::MONTHNAMES[@month.to_i] %> <%= @year %></h1>
+<!-- Report Header -->
+<div class="bg-gray-900 rounded-xl p-6 border border-gray-800 shadow-lg mb-8">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-white">Report for <%= Date::MONTHNAMES[@month.to_i] %> <%= @year %></h1>
+      <p class="text-gray-400 mt-1">Time breakdown by project</p>
+    </div>
+    
+    <div class="flex items-center gap-2">
+      <% prev_month = @month.to_i == 1 ? 12 : @month.to_i - 1 %>
+      <% prev_year = @month.to_i == 1 ? @year.to_i - 1 : @year.to_i %>
+      <%= link_to "← Previous", reports_path(month: prev_month, year: prev_year), class: "bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors" %>
 
-  <div class="flex items-center space-x-2">
-    <% prev_month = @month.to_i == 1 ? 12 : @month.to_i - 1 %>
-    <% prev_year = @month.to_i == 1 ? @year.to_i - 1 : @year.to_i %>
-    <%= link_to "← Previous", reports_path(month: prev_month, year: prev_year), class: "px-3 py-1 bg-gray-100 text-black rounded hover:bg-gray-300" %>
-
-    <% next_month = @month.to_i == 12 ? 1 : @month.to_i + 1 %>
-    <% next_year = @month.to_i == 12 ? @year.to_i + 1 : @year.to_i %>
-    <%= link_to "Next →", reports_path(month: next_month, year: next_year), class: "px-3 py-1 bg-gray-100 text-black rounded hover:bg-gray-300" %>
+      <% next_month = @month.to_i == 12 ? 1 : @month.to_i + 1 %>
+      <% next_year = @month.to_i == 12 ? @year.to_i + 1 : @year.to_i %>
+      <%= link_to "Next →", reports_path(month: next_month, year: next_year), class: "bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors" %>
+    </div>
   </div>
 </div>
 
-<div id="works" class="min-w-full space-y-5 mt-8">
+<!-- Report Data -->
+<div class="space-y-4">
   <% if @reports.any? %>
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold text-gray-200">Project Summary</h2>
+      <div class="text-sm text-gray-400"><%= pluralize(@reports.length, 'project') %> with time logged</div>
+    </div>
+
+    <% total_time = @reports.sum { |r| r.total_duration.to_i } %>
+    
+    <!-- Total Time Card -->
+    <div class="bg-orange-900/20 border border-orange-800/30 rounded-xl p-6 mb-6">
+      <div class="text-center">
+        <div class="text-3xl font-bold text-orange-400"><%= time_description(total_time) %></div>
+        <div class="text-sm text-orange-200/80 mt-1">Total time logged this month</div>
+      </div>
+    </div>
+
     <% @reports.each do |work| %>
-      <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
-        <h2 class="font-bold text-xl"><%= work.project.name %></h2>
-        <p class="text-gray-500 font-medium text-sm"><%= time_description(work.total_duration) %></p>
+      <!-- Project Report Entry -->
+      <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 shadow-lg hover:border-gray-700 transition-colors">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="bg-gray-700 text-gray-200 px-3 py-1 rounded-full text-sm font-medium"><%= work.project_name %></span>
+            </div>
+            <h3 class="text-white font-medium mb-2"><%= work.project_name %> Project</h3>
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 text-gray-400 text-sm">
+              <span>Time logged in <%= Date::MONTHNAMES[@month.to_i] %> <%= @year %></span>
+            </div>
+          </div>
+          <div class="flex flex-col lg:flex-row items-start lg:items-center gap-4">
+            <div class="text-right">
+              <div class="text-2xl font-bold text-gray-300"><%= time_description(work.total_duration.to_i) %></div>
+              <div class="text-sm text-gray-400">
+                <%= number_to_percentage((work.total_duration.to_f / total_time.to_f) * 100, precision: 1) %> of total
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     <% end %>
   <% else %>
-    <p class="text-center my-10">No works found.</p>
+    <div class="bg-gray-900 rounded-xl p-8 border border-gray-800 text-center">
+      <p class="text-gray-400 text-lg">No time logged for <%= Date::MONTHNAMES[@month.to_i] %> <%= @year %>.</p>
+      <p class="text-gray-500 text-sm mt-2">Start tracking your work sessions to see reports!</p>
+      <div class="mt-4">
+        <%= link_to "Create Work Session", new_work_path, class: "bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium transition-colors" %>
+      </div>
+    </div>
   <% end %>
 </div>
