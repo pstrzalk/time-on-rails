@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracking - New Work (Design Prototype)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gray: {
+                            850: '#1f2937',
+                            900: '#111827',
+                            950: '#0f172a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-950 text-white min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-900 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-8">
+                    <h1 class="text-2xl font-bold text-white">Time Tracking</h1>
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="#" class="text-blue-400 font-medium border-b-2 border-blue-400 pb-1">Works</a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">Projects</a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">Reports</a>
+                    </nav>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                        + New work
+                    </button>
+                    <button class="text-gray-300 hover:text-white transition-colors">Log out</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-6 py-8">
+        <!-- Breadcrumb -->
+        <div class="mb-6">
+            <nav class="flex items-center space-x-2 text-sm text-gray-400">
+                <a href="#" class="hover:text-white transition-colors">Works</a>
+                <span>›</span>
+                <span class="text-white">New work session</span>
+            </nav>
+        </div>
+
+        <!-- Form Container -->
+        <div class="bg-gray-900 rounded-xl border border-gray-800 shadow-xl">
+            <!-- Form Header -->
+            <div class="border-b border-gray-800 p-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                        <span class="text-white text-lg">⏱</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">Create New Work Session</h1>
+                        <p class="text-gray-400 mt-1">Track your time on a project</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <form class="p-6 space-y-8">
+                <!-- Project Selection -->
+                <div class="space-y-3">
+                    <label class="block text-sm font-semibold text-gray-200 mb-3">
+                        Project <span class="text-red-400">*</span>
+                    </label>
+                    <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors">
+                        <option value="">Select a project...</option>
+                        <option value="kaizapp">KaizApp</option>
+                        <option value="closeknit">CloseKnit</option>
+                    </select>
+                    <p class="text-sm text-gray-400">Choose which project this work session belongs to</p>
+                </div>
+
+                <!-- Date -->
+                <div class="space-y-3">
+                    <label class="block text-sm font-semibold text-gray-200">
+                        Date <span class="text-red-400">*</span>
+                    </label>
+                    <input 
+                        type="date" 
+                        value="2025-08-13"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                    >
+                    <p class="text-sm text-gray-400">When did you perform this work?</p>
+                </div>
+
+                <!-- Description -->
+                <div class="space-y-3">
+                    <label class="block text-sm font-semibold text-gray-200">
+                        Description
+                    </label>
+                    <textarea 
+                        rows="3" 
+                        placeholder="What did you work on? (optional)"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors resize-none"
+                    ></textarea>
+                    <p class="text-sm text-gray-400">Brief description of the work performed</p>
+                </div>
+
+                <!-- Duration Section -->
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-200 mb-3">Duration</h3>
+                        <p class="text-sm text-gray-400 mb-4">Set initial duration or leave at 0 to start timing immediately</p>
+                    </div>
+                    
+                    <!-- Duration Input Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                            <label class="block text-sm font-medium text-gray-300 mb-2 text-center">Hours</label>
+                            <input 
+                                type="number" 
+                                min="0" 
+                                value="0"
+                                class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-center text-xl font-mono focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                            >
+                        </div>
+                        <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                            <label class="block text-sm font-medium text-gray-300 mb-2 text-center">Minutes</label>
+                            <input 
+                                type="number" 
+                                min="0" 
+                                max="59" 
+                                value="0"
+                                class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-center text-xl font-mono focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                            >
+                        </div>
+                        <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                            <label class="block text-sm font-medium text-gray-300 mb-2 text-center">Seconds</label>
+                            <input 
+                                type="number" 
+                                min="0" 
+                                max="59" 
+                                value="0"
+                                class="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-center text-xl font-mono focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Quick Duration Buttons -->
+                    <div class="space-y-3">
+                        <h4 class="text-sm font-medium text-gray-300">Quick durations:</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                15m
+                            </button>
+                            <button type="button" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                30m
+                            </button>
+                            <button type="button" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                1h
+                            </button>
+                            <button type="button" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                2h
+                            </button>
+                            <button type="button" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                4h
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Timer Mode Info -->
+                    <div class="bg-orange-900/20 border border-orange-800/30 rounded-lg p-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-5 h-5 text-orange-400 mt-0.5">💡</div>
+                            <div>
+                                <h4 class="text-orange-300 font-medium mb-1">Timer Mode</h4>
+                                <p class="text-orange-200/80 text-sm">
+                                    If you set duration to 0:00:00, the work session will start timing immediately when created.
+                                    This is perfect for starting a new task right away.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-800">
+                    <button 
+                        type="submit" 
+                        class="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center"
+                    >
+                        Create Work Session
+                    </button>
+                    <button 
+                        type="button" 
+                        class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-6 py-3 rounded-lg font-medium transition-colors"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Additional Actions -->
+        <div class="mt-8 text-center">
+            <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm">
+                ← Back to works list
+            </a>
+        </div>
+    </main>
+</body>
+</html>

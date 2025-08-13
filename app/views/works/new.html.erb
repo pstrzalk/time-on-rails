@@ -1,7 +1,34 @@
 <% content_for :title, "New work" %>
 
-<h1 class="font-bold text-4xl">New work</h1>
+<!-- Breadcrumb -->
+<div class="mb-6">
+  <nav class="flex items-center space-x-2 text-sm text-gray-400">
+    <%= link_to "Works", works_path, class: "hover:text-white transition-colors" %>
+    <span>›</span>
+    <span class="text-white">New work session</span>
+  </nav>
+</div>
 
-<%= render "form", work: @work %>
+<!-- Form Container -->
+<div class="bg-gray-900 rounded-xl border border-gray-800 shadow-xl">
+  <!-- Form Header -->
+  <div class="border-b border-gray-800 p-6">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+        <span class="text-white text-lg">⏱</span>
+      </div>
+      <div>
+        <h1 class="text-2xl font-bold text-white">Create New Work Session</h1>
+        <p class="text-gray-400 mt-1">Track your time on a project</p>
+      </div>
+    </div>
+  </div>
 
-<%= link_to "Back to works", works_path, class: "w-full text-black sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <!-- Form Content -->
+  <%= render "form", work: @work %>
+</div>
+
+<!-- Additional Actions -->
+<div class="mt-8 text-center">
+  <%= link_to "← Back to works list", works_path, class: "text-gray-400 hover:text-white transition-colors text-sm" %>
+</div>

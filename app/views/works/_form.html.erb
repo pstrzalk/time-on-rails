@@ -3,48 +3,128 @@
   minutes = (work.total_time - hours * 3600) / 60
   seconds = (work.total_time - hours * 3600 - minutes * 60) % 60
 %>
-<%= form_with(model: work, class: "contents") do |form| %>
+
+<%= form_with(model: work, class: "p-6 space-y-8") do |form| %>
   <% if work.errors.any? %>
-    <div id="error_explanation" data-turbo-cache="false" class="bg-gray-100 text-red-500 p-4 rounded-md mt-4">
-      <ul class="list-disc ml-4">
+    <div id="error_explanation" data-turbo-cache="false" class="bg-red-900/20 border border-red-800/30 rounded-lg p-4">
+      <h4 class="text-red-300 font-medium mb-2">Please fix the following errors:</h4>
+      <ul class="text-red-200/80 text-sm space-y-1">
         <% work.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+          <li>• <%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="my-5">
-    <%= form.label :date %>
-    <%= form.date_field :date, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": work.errors[:date].none?, "border-red-400 focus:outline-red-600": work.errors[:date].any?}] %>
+  <!-- Project Selection -->
+  <div class="space-y-3">
+    <%= form.label :project_id, "Project", class: "block text-sm font-semibold text-gray-200 mb-3" %>
+    <span class="text-red-400">*</span>
+    <%= form.select :project_id, @project_options, 
+        { 
+          include_blank: "Select a project...",
+          prompt: "Select a project..." 
+        }, 
+        { 
+          class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors" 
+        } 
+    %>
+    <p class="text-sm text-gray-400">Choose which project this work session belongs to</p>
   </div>
 
-  <div class="my-5">
-    <%= form.label :description %>
-    <%= form.text_field :description, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": work.errors[:description].none?, "border-red-400 focus:outline-red-600": work.errors[:description].any?}] %>
+  <!-- Date -->
+  <div class="space-y-3">
+    <%= form.label :date, "Date", class: "block text-sm font-semibold text-gray-200" %>
+    <span class="text-red-400">*</span>
+    <%= form.date_field :date, 
+        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors" %>
+    <p class="text-sm text-gray-400">When did you perform this work?</p>
   </div>
 
-  <div class="my-5">
-    <%= form.label :duration_hours %>
-    <%= form.number_field :duration_hours, value: hours, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": work.errors[:description].none?, "border-red-400 focus:outline-red-600": work.errors[:description].any?}] %>
+  <!-- Description -->
+  <div class="space-y-3">
+    <%= form.label :description, "Description", class: "block text-sm font-semibold text-gray-200" %>
+    <%= form.text_area :description, 
+        rows: 3,
+        placeholder: "What did you work on? (optional)",
+        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors resize-none" %>
+    <p class="text-sm text-gray-400">Brief description of the work performed</p>
   </div>
 
-  <div class="my-5">
-    <%= form.label :duration_minutes %>
-    <%= form.number_field :duration_minutes, value: minutes, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": work.errors[:description].none?, "border-red-400 focus:outline-red-600": work.errors[:description].any?}] %>
+  <!-- Duration Section -->
+  <div class="space-y-6">
+    <div>
+      <h3 class="text-lg font-semibold text-gray-200 mb-3">Duration</h3>
+      <p class="text-sm text-gray-400 mb-4">Set initial duration or leave at 0 to start timing immediately</p>
+    </div>
+    
+    <!-- Duration Input Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+        <%= form.label :duration_hours, "Hours", class: "block text-sm font-medium text-gray-300 mb-2 text-center" %>
+        <%= form.number_field :duration_hours, 
+            value: hours, 
+            min: 0,
+            class: "w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-center text-xl font-mono focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors" %>
+      </div>
+      <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+        <%= form.label :duration_minutes, "Minutes", class: "block text-sm font-medium text-gray-300 mb-2 text-center" %>
+        <%= form.number_field :duration_minutes, 
+            value: minutes,
+            min: 0, 
+            max: 59,
+            class: "w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-center text-xl font-mono focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors" %>
+      </div>
+      <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+        <%= form.label :duration_seconds, "Seconds", class: "block text-sm font-medium text-gray-300 mb-2 text-center" %>
+        <%= form.number_field :duration_seconds, 
+            value: seconds,
+            min: 0, 
+            max: 59,
+            class: "w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-center text-xl font-mono focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors" %>
+      </div>
+    </div>
+
+    <!-- Quick Duration Buttons -->
+    <div class="space-y-3">
+      <h4 class="text-sm font-medium text-gray-300">Quick durations:</h4>
+      <div class="flex flex-wrap gap-2">
+        <button type="button" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="setDuration(0, 15, 0)">15m</button>
+        <button type="button" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="setDuration(0, 30, 0)">30m</button>
+        <button type="button" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="setDuration(1, 0, 0)">1h</button>
+        <button type="button" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="setDuration(2, 0, 0)">2h</button>
+        <button type="button" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="setDuration(4, 0, 0)">4h</button>
+      </div>
+    </div>
+
+    <!-- Timer Mode Info -->
+    <div class="bg-orange-900/20 border border-orange-800/30 rounded-lg p-4">
+      <div class="flex items-start gap-3">
+        <div class="w-5 h-5 text-orange-400 mt-0.5">💡</div>
+        <div>
+          <h4 class="text-orange-300 font-medium mb-1">Timer Mode</h4>
+          <p class="text-orange-200/80 text-sm">
+            If you set duration to 0:00:00, the work session will start timing immediately when created.
+            This is perfect for starting a new task right away.
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :duration_seconds %>
-    <%= form.number_field :duration_seconds, value: seconds, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": work.errors[:description].none?, "border-red-400 focus:outline-red-600": work.errors[:description].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :project_id %>
-    <%= form.select :project_id, @project_options, { include_blank: true }, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": work.errors[:project_id].none?, "border-red-400 focus:outline-red-600": work.errors[:project_id].any?}] %>
-  </div>
-
-  <div class="inline">
-    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  <!-- Form Actions -->
+  <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-800">
+    <%= form.submit "Create Work Session", 
+        class: "flex-1 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors" %>
+    <%= link_to "Cancel", works_path, 
+        class: "bg-gray-700 hover:bg-gray-600 text-gray-300 px-6 py-3 rounded-lg font-medium transition-colors text-center" %>
   </div>
 <% end %>
+
+<script>
+  function setDuration(hours, minutes, seconds) {
+    document.getElementById('work_duration_hours').value = hours;
+    document.getElementById('work_duration_minutes').value = minutes;
+    document.getElementById('work_duration_seconds').value = seconds;
+  }
+</script>

@@ -21,33 +21,41 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-900 text-white">
-    <main class="full">
-      <% if current_user %>
-        <nav class="bg-gray-100 dark:bg-gray-800 py-3 shadow mb-8">
-          <div class="px-4 md:px-8 mx-auto flex items-center justify-between">
-            <div class="text-xl font-bold text-gray-900 dark:text-gray-100">Time Tracking</div>
-
-            <div class="space-x-6">
-              <a href="<%= works_path %>" class="text-gray-700 dark:text-gray-200 hover:underline">Works</a>
-              <a href="<%= projects_path %>" class="text-gray-700 dark:text-gray-200 hover:underline">Projects</a>
-              <a href="<%= reports_path %>" class="text-gray-700 dark:text-gray-200 hover:underline">Reports</a>
-              <%= link_to "Log out", destroy_user_session_path, data: { 'turbo-method' => :delete }, class: "text-gray-700 dark:text-gray-200 hover:underline" %>
+  <body class="bg-gray-950 text-white min-h-screen">
+    <% if current_user %>
+      <!-- Header -->
+      <header class="bg-gray-900 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-8">
+              <h1 class="text-2xl font-bold text-white">Time Tracking</h1>
+              <nav class="hidden md:flex space-x-6">
+                <%= link_to "Works", works_path, class: "#{request.path == works_path ? 'text-orange-400 font-medium border-b-2 border-orange-400 pb-1' : 'text-gray-300 hover:text-white transition-colors'}" %>
+                <%= link_to "Projects", projects_path, class: "#{request.path == projects_path ? 'text-orange-400 font-medium border-b-2 border-orange-400 pb-1' : 'text-gray-300 hover:text-white transition-colors'}" %>
+                <%= link_to "Reports", reports_path, class: "#{request.path == reports_path ? 'text-orange-400 font-medium border-b-2 border-orange-400 pb-1' : 'text-gray-300 hover:text-white transition-colors'}" %>
+              </nav>
+            </div>
+            <div class="flex items-center space-x-4">
+              <%= link_to "+ New work", new_work_path, class: "bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg font-medium transition-colors" %>
+              <%= link_to "Log out", destroy_user_session_path, data: { 'turbo-method' => :delete }, class: "text-gray-300 hover:text-white transition-colors" %>
             </div>
           </div>
-        </nav>
-      <% end %>
+        </div>
+      </header>
+    <% end %>
+
+    <main>
 
       <% if notice.present? %>
-        <div class="absolute top-16 left-16 right-16 text-center align-middle"
+        <div class="fixed top-20 left-4 right-4 z-50 text-center"
            id="notice"
            data-controller="notices"
            data-action="click->notices#hide">
-          <div class="w-full md:w-3xl mx-auto bg-green-200 text-black p-3 font-medium rounded-md cursor-pointer"><%= notice %></div>
+          <div class="max-w-md mx-auto bg-orange-600 text-white p-3 font-medium rounded-lg cursor-pointer shadow-lg"><%= notice %></div>
         </div>
       <% end %>
 
-      <div class="min-h-full px-4 md:px-8">
+      <div class="max-w-7xl mx-auto px-6 py-8">
         <%= yield %>
       </div>
     </main>

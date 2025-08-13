@@ -1,35 +1,71 @@
-<form method="get" action="<%= works_path %>" class="mb-6 flex items-center space-x-3">
-  <label for="project_id" class="text-xl font-semibold text-gray-100 whitespace-nowrap">Filter by project</label>
-  <select name="project_id" id="project_id" class="block w-full max-w-xs rounded-md border border-gray-300 bg-white py-2 px-3 text-sm leading-5 text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" onchange="this.form.submit()">
-    <option value="" <%= params[:project_id].blank? ? 'selected' : '' %>></option>
-    <% @project_options.each do |name, id| %>
-      <option value="<%= id %>" <%= params[:project_id].to_s == id.to_s ? 'selected' : '' %>><%= name %></option>
-    <% end %>
-  </select>
-</form>
-
-<div class="flex justify-between items-center">
-  <h1 class="font-bold text-4xl">Works</h1>
-  <%= link_to "New work", new_work_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+<!-- Filter Section -->
+<div class="mb-6">
+  <form method="get" action="<%= works_path %>" class="flex items-center gap-4">
+    <label for="project_id" class="text-gray-300 font-medium">Filter by project:</label>
+    <select name="project_id" id="project_id" class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent min-w-48" onchange="this.form.submit()">
+      <option value="" <%= params[:project_id].blank? ? 'selected' : '' %>>All projects</option>
+      <% @project_options.each do |name, id| %>
+        <option value="<%= id %>" <%= params[:project_id].to_s == id.to_s ? 'selected' : '' %>><%= name %></option>
+      <% end %>
+    </select>
+  </form>
 </div>
 
-<div id="works" class="min-w-full space-y-5 mt-8">
+<!-- Works List -->
+<div class="space-y-4">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-semibold text-gray-200">Recent Work Sessions</h2>
+    <div class="text-sm text-gray-400"><%= pluralize(@works.count, 'session') %> found</div>
+  </div>
+
   <% if @works.any? %>
     <% @works.each do |work| %>
-      <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
-        <%= render work %>
-        <div class="w-1/5 flex flex-row space-x-4 space-y-2">
-          <% if work.started_at? %>
-            <%= link_to "Stop", stop_work_path(work), class: "w-full sm:w-auto text-black text-center rounded-md px-6 py-3 bg-red-300 hover:bg-red-100 inline-block font-medium", data: { turbo_method: "post" } %>
-          <% else %>
-            <%= link_to "Start", start_work_path(work), class: "w-full sm:w-auto text-black text-center rounded-md px-6 py-3 bg-green-300 hover:bg-green-100 inline-block font-medium", data: { turbo_method: "post" } %>
-            <%= link_to "Edit", edit_work_path(work), class: "w-full sm:w-auto text-black text-center rounded-md px-6 py-3 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= button_to "Destroy", work, method: :delete, class: "w-full text-white sm:w-auto rounded-md px-6 py-3 bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
-          <% end %>
+      <!-- Work Entry <%= work.in_progress? ? '- Running' : '' %> -->
+      <div class="bg-gray-900 rounded-xl p-6 <%= work.in_progress? ? 'border-l-4 border-orange-500 border-r border-t border-b border-gray-800' : 'border border-gray-800' %> shadow-lg <%= work.in_progress? ? '' : 'hover:border-gray-700' %> transition-colors">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="bg-gray-700 text-gray-200 px-3 py-1 rounded-full text-sm font-medium"><%= work.project&.name || 'No Project' %></span>
+              <% if work.in_progress? %>
+                <div class="flex items-center gap-2">
+                  <span class="text-orange-400 text-sm font-medium">Running</span>
+                  <div class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
+                </div>
+              <% else %>
+                <span class="text-gray-500 text-sm">Stopped</span>
+              <% end %>
+            </div>
+            <h3 class="text-white font-medium mb-2"><%= work.description.present? ? work.description : 'No description' %></h3>
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 text-gray-400 text-sm">
+              <span><%= work.date.strftime("%A, %d-%m-%Y") %></span>
+              <% if work.in_progress? %>
+                <span class="hidden sm:inline">•</span>
+                <span>Started <%= time_ago_in_words(work.started_at) %> ago</span>
+              <% end %>
+            </div>
+          </div>
+          <div class="flex flex-col lg:flex-row items-start lg:items-center gap-4">
+            <div class="text-right">
+              <div class="<%= work.in_progress? ? 'text-2xl font-bold text-orange-400' : 'text-xl font-semibold text-gray-300' %>"><%= time_description(work.total_time) %></div>
+              <div class="text-sm text-gray-400">Time used</div>
+            </div>
+            <div class="flex gap-2">
+              <% if work.in_progress? %>
+                <%= link_to "Stop", stop_work_path(work), class: "bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors", data: { turbo_method: "post" } %>
+              <% else %>
+                <%= link_to "Start", start_work_path(work), class: "bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors", data: { turbo_method: "post" } %>
+              <% end %>
+              <%= link_to "Edit", edit_work_path(work), class: "bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors" %>
+              <%= button_to "Delete", work, method: :delete, class: "bg-gray-800/50 hover:bg-gray-700/50 text-gray-400 hover:text-red-400 px-4 py-2 rounded-lg font-medium transition-colors", data: { turbo_confirm: "Are you sure?" } %>
+            </div>
+          </div>
         </div>
       </div>
     <% end %>
   <% else %>
-    <p class="text-center my-10">No works found.</p>
+    <div class="bg-gray-900 rounded-xl p-8 border border-gray-800 text-center">
+      <p class="text-gray-400 text-lg">No work sessions found.</p>
+      <p class="text-gray-500 text-sm mt-2">Create your first work session to get started!</p>
+    </div>
   <% end %>
 </div>
