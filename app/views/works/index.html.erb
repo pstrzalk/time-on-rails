@@ -1,13 +1,16 @@
 <!-- Filter Section -->
 <div class="mb-6">
   <form method="get" action="<%= works_path %>" class="flex items-center gap-4">
-    <label for="project_id" class="text-gray-300 font-medium">Filter by project:</label>
-    <select name="project_id" id="project_id" class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent min-w-48" onchange="this.form.submit()">
+    <label for="project_id" class="text-gray-300 font-medium">Filter by</label>
+    <select name="project_id" id="project_id" class="bg-gray-800 border border-gray-700 rounded-lg px-1 py-2 text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent min-w-36" onchange="this.form.submit()">
       <option value="" <%= params[:project_id].blank? ? 'selected' : '' %>>All projects</option>
       <% @project_options.each do |name, id| %>
         <option value="<%= id %>" <%= params[:project_id].to_s == id.to_s ? 'selected' : '' %>><%= name %></option>
       <% end %>
     </select>
+
+    <input type="hidden" name="only_this_month" value="<%= params[:only_this_month] == '1' ? '1' : '0' %>">
+    <button class="<%= params[:only_this_month] == '1' ? "bg-orange-500" : "" %> border border-gray-700 hover:bg-orange-600 px-4 py-2 rounded-lg transition-colors" data-turbo="false" onclick="this.form.only_this_month.value = this.form.only_this_month.value === '1' ? '0' : '1'; this.form.submit()" >This Month Only</button>
   </form>
 </div>
 
@@ -15,7 +18,7 @@
 <div class="space-y-4">
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-semibold text-gray-200">Recent Work Sessions</h2>
-    <div class="text-sm text-gray-400"><%= pluralize(@works.count, 'session') %> found</div>
+    <div class="text-sm text-gray-400"><%= pluralize(@works.count, 'session') %></div>
   </div>
 
   <% if @works.any? %>
@@ -47,7 +50,6 @@
           <div class="flex flex-col lg:flex-row items-start lg:items-center gap-4">
             <div class="text-right">
               <div class="<%= work.in_progress? ? 'text-2xl font-bold text-orange-400' : 'text-xl font-semibold text-gray-300' %>"><%= time_description(work.total_time) %></div>
-              <div class="text-sm text-gray-400">Time used</div>
             </div>
             <div class="flex gap-2">
               <% if work.in_progress? %>

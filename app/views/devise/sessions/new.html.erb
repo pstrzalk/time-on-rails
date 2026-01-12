@@ -6,15 +6,15 @@
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <div class="mt-8 space-y-6">
-        <input type="hidden" name="remember" value="true" />
+        <input type="hidden" name="remember" value="true">
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
             <%= f.label :email, class: "sr-only", for: "email-address" %>
-            <%= f.email_field :email, id: "email-address", autofocus: true, autocomplete: "email", placeholder: "Email address", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-gray-100 focus:border-gray-100 focus:z-10 sm:text-sm" %>
+            <%= f.email_field :email, value: "p.strzalkowski@visuality.pl", id: "email-address", autofocus: true, autocomplete: "email", placeholder: "Email address", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-gray-100 focus:border-gray-100 focus:z-10 sm:text-sm" %>
           </div>
           <div>
             <%= f.label :password, for: "password", class: "sr-only" %>
-            <%= f.password_field :password, id: "password", autocomplete: "current-password", placeholder: "Password", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-100 placeholder-gray-500 text-gray-100 rounded-b-md focus:outline-none focus:ring-gray-100 focus:border-gray-100 focus:z-10 sm:text-sm" %>
+            <%= f.password_field :password, value: "p.strzalkowski@visuality.pl", id: "password", autocomplete: "current-password", placeholder: "Password", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-100 placeholder-gray-500 text-gray-100 rounded-b-md focus:outline-none focus:ring-gray-100 focus:border-gray-100 focus:z-10 sm:text-sm" %>
           </div>
         </div>
         <% if devise_mapping.rememberable? %>

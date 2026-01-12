@@ -8,9 +8,9 @@
   <% if work.errors.any? %>
     <div id="error_explanation" data-turbo-cache="false" class="bg-red-900/20 border border-red-800/30 rounded-lg p-4">
       <h4 class="text-red-300 font-medium mb-2">Please fix the following errors:</h4>
-      <ul class="text-red-200/80 text-sm space-y-1">
-        <% work.errors.each do |error| %>
-          <li>• <%= error.full_message %></li>
+      <ul class="text-red-200/80 space-y-1">
+        <% project.errors.each do |error| %>
+          <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
@@ -18,25 +18,23 @@
 
   <!-- Project Selection -->
   <div class="space-y-3">
-    <%= form.label :project_id, "Project", class: "block text-sm font-semibold text-gray-200 mb-3" %>
-    <span class="text-red-400">*</span>
-    <%= form.select :project_id, @project_options, 
-        { 
+    <%= form.label :project_id, "Project *", class: "block text-sm font-semibold text-gray-200 mb-3" %>
+    <%= form.select :project_id, @project_options,
+        {
           include_blank: "Select a project...",
-          prompt: "Select a project..." 
-        }, 
-        { 
-          class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors" 
-        } 
+          prompt: "Select a project..."
+        },
+        {
+          class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+        }
     %>
     <p class="text-sm text-gray-400">Choose which project this work session belongs to</p>
   </div>
 
   <!-- Date -->
   <div class="space-y-3">
-    <%= form.label :date, "Date", class: "block text-sm font-semibold text-gray-200" %>
-    <span class="text-red-400">*</span>
-    <%= form.date_field :date, 
+    <%= form.label :date, "Date *", class: "block text-sm font-semibold text-gray-200" %>
+    <%= form.date_field :date,
         class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors" %>
     <p class="text-sm text-gray-400">When did you perform this work?</p>
   </div>
@@ -44,7 +42,7 @@
   <!-- Description -->
   <div class="space-y-3">
     <%= form.label :description, "Description", class: "block text-sm font-semibold text-gray-200" %>
-    <%= form.text_area :description, 
+    <%= form.text_area :description,
         rows: 3,
         placeholder: "What did you work on? (optional)",
         class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors resize-none" %>
@@ -57,29 +55,29 @@
       <h3 class="text-lg font-semibold text-gray-200 mb-3">Duration</h3>
       <p class="text-sm text-gray-400 mb-4">Set initial duration or leave at 0 to start timing immediately</p>
     </div>
-    
+
     <!-- Duration Input Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
         <%= form.label :duration_hours, "Hours", class: "block text-sm font-medium text-gray-300 mb-2 text-center" %>
-        <%= form.number_field :duration_hours, 
-            value: hours, 
+        <%= form.number_field :duration_hours,
+            value: hours,
             min: 0,
             class: "w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-center text-xl font-mono focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors" %>
       </div>
       <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
         <%= form.label :duration_minutes, "Minutes", class: "block text-sm font-medium text-gray-300 mb-2 text-center" %>
-        <%= form.number_field :duration_minutes, 
+        <%= form.number_field :duration_minutes,
             value: minutes,
-            min: 0, 
+            min: 0,
             max: 59,
             class: "w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-center text-xl font-mono focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors" %>
       </div>
       <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
         <%= form.label :duration_seconds, "Seconds", class: "block text-sm font-medium text-gray-300 mb-2 text-center" %>
-        <%= form.number_field :duration_seconds, 
+        <%= form.number_field :duration_seconds,
             value: seconds,
-            min: 0, 
+            min: 0,
             max: 59,
             class: "w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white text-center text-xl font-mono focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors" %>
       </div>
@@ -114,9 +112,10 @@
 
   <!-- Form Actions -->
   <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-800">
-    <%= form.submit "Create Work Session", 
+    <% label = work.persisted? ? "Update Work Session" : "Create Work Session" %>
+    <%= form.submit label,
         class: "flex-1 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors" %>
-    <%= link_to "Cancel", works_path, 
+    <%= link_to "Cancel", works_path,
         class: "bg-gray-700 hover:bg-gray-600 text-gray-300 px-6 py-3 rounded-lg font-medium transition-colors text-center" %>
   </div>
 <% end %>

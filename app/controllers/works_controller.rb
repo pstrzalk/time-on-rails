@@ -5,10 +5,15 @@ class WorksController < ApplicationController
   # GET /works or /works.json
   def index
     @project_options = Project.where(user: current_user).map { |p| [ p.name, p.id ] }
+
     if params[:project_id].present?
       @works = Work.where(user: current_user, project_id: params[:project_id]).order(id: :desc)
     else
       @works = Work.where(user: current_user).order(id: :desc)
+    end
+
+    if params[:only_this_month] == "1"
+      @works = @works.where(date: DateTime.current.beginning_of_month..)
     end
   end
 
