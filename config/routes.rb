@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
+  get :analytics, to: "analytics#index"
   get :reports, to: "reports#index"
   resources :works do
     member do

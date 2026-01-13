@@ -1,0 +1,115 @@
+<!-- Analytics Header -->
+<div class="bg-gray-900 rounded-xl p-6 border border-gray-800 shadow-lg mb-8">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-white">Your Activity</h1>
+      <p class="text-gray-400 mt-1">Page views over the last year</p>
+    </div>
+  </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800">
+    <div class="text-gray-400 text-sm">Total Page Views</div>
+    <div class="text-3xl font-bold text-white mt-1"><%= number_with_delimiter(@total_views) %></div>
+  </div>
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800">
+    <div class="text-gray-400 text-sm">Days Active</div>
+    <div class="text-3xl font-bold text-white mt-1"><%= @days_active %></div>
+  </div>
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800">
+    <div class="text-gray-400 text-sm">Most Active Day</div>
+    <div class="text-3xl font-bold text-white mt-1"><%= @max_views_per_day %> views</div>
+  </div>
+</div>
+
+<!-- Activity Heatmap -->
+<div class="bg-gray-900 rounded-xl p-6 border border-gray-800 shadow-lg mb-8">
+  <h2 class="text-xl font-semibold text-gray-200 mb-4">Activity Heatmap</h2>
+
+  <div class="overflow-x-auto">
+    <div class="inline-block min-w-full">
+      <!-- Month labels -->
+      <div class="flex mb-2 text-xs text-gray-500">
+        <div class="w-8"></div><!-- Spacer for day labels -->
+        <%
+          weeks = (@start_date..@end_date).to_a.group_by { |d| d.cweek + d.cwyear * 100 }
+          current_month = nil
+        %>
+        <% weeks.each do |_, week_days| %>
+          <% first_day = week_days.first %>
+          <% if first_day.month != current_month %>
+            <% current_month = first_day.month %>
+            <div class="w-3 text-center"><%= first_day.strftime("%b")[0] %></div>
+          <% else %>
+            <div class="w-3"></div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <!-- Heatmap grid -->
+      <div class="flex">
+        <!-- Day labels -->
+        <div class="flex flex-col text-xs text-gray-500 mr-1">
+          <div class="h-3 leading-3"></div>
+          <div class="h-3 leading-3">M</div>
+          <div class="h-3 leading-3"></div>
+          <div class="h-3 leading-3">W</div>
+          <div class="h-3 leading-3"></div>
+          <div class="h-3 leading-3">F</div>
+          <div class="h-3 leading-3"></div>
+        </div>
+
+        <!-- Calendar grid -->
+        <div class="flex gap-0.5">
+          <% weeks.each do |_, week_days| %>
+            <div class="flex flex-col gap-0.5">
+              <% (0..6).each do |wday| %>
+                <%
+                  # Find the day in this week with this weekday (0=Sunday, 1=Monday, etc.)
+                  # We want Monday as first day, so adjust
+                  adjusted_wday = wday == 0 ? 7 : wday
+                  day = week_days.find { |d| d.cwday == adjusted_wday }
+                %>
+                <% if day && day >= @start_date && day <= @end_date %>
+                  <% count = @daily_views[day.to_s] || 0 %>
+                  <div class="w-3 h-3 rounded-sm <%= heatmap_intensity(count, @max_views_per_day) %> cursor-pointer"
+                       title="<%= day.strftime('%B %d, %Y') %>: <%= count %> page views"></div>
+                <% else %>
+                  <div class="w-3 h-3"></div>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="flex items-center justify-end gap-2 mt-4 text-xs text-gray-500">
+        <span>Less</span>
+        <div class="w-3 h-3 rounded-sm bg-gray-800"></div>
+        <div class="w-3 h-3 rounded-sm bg-orange-900"></div>
+        <div class="w-3 h-3 rounded-sm bg-orange-700"></div>
+        <div class="w-3 h-3 rounded-sm bg-orange-500"></div>
+        <div class="w-3 h-3 rounded-sm bg-orange-400"></div>
+        <span>More</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Top Pages -->
+<% if @top_pages.any? %>
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 shadow-lg">
+    <h2 class="text-xl font-semibold text-gray-200 mb-4">Most Visited Pages</h2>
+    <div class="space-y-3">
+      <% @top_pages.each do |path, count| %>
+        <div class="flex justify-between items-center p-3 bg-gray-800 rounded-lg">
+          <span class="text-gray-300 font-mono text-sm"><%= path %></span>
+          <span class="text-orange-400 font-semibold"><%= count %> views</span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

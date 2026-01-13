@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_08_213114) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_13_120514) do
+  create_table "page_views", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "path", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "created_at"], name: "index_page_views_on_user_id_and_created_at"
+    t.index ["user_id", "path"], name: "index_page_views_on_user_id_and_path"
+    t.index ["user_id"], name: "index_page_views_on_user_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -44,5 +54,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_08_213114) do
     t.index ["user_id"], name: "index_works_on_user_id"
   end
 
+  add_foreign_key "page_views", "users"
   add_foreign_key "works", "projects"
 end
