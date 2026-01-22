@@ -6,15 +6,25 @@ class WorksController < ApplicationController
   def index
     @project_options = Project.where(user: current_user).map { |p| [ p.name, p.id ] }
 
+    works = Work.where(user: current_user)
+
     if params[:project_id].present?
-      @works = Work.where(user: current_user, project_id: params[:project_id]).order(id: :desc)
-    else
-      @works = Work.where(user: current_user).order(id: :desc)
+      works = works.where(project_id: params[:project_id])
     end
 
     if params[:only_this_month] == "1"
-      @works = @works.where(date: DateTime.current.beginning_of_month..)
+      works = works.where(date: DateTime.current.beginning_of_month..)
     end
+
+    @total_count = works.count
+    @per_page = 20
+    @current_page = (params[:page].presence || 1).to_i
+    @current_page = 1 if @current_page < 1
+    @total_pages = (@total_count.to_f / @per_page).ceil
+    @total_pages = 1 if @total_pages < 1
+    @current_page = @total_pages if @current_page > @total_pages
+
+    @works = works.order(id: :desc).limit(@per_page).offset((@current_page - 1) * @per_page)
   end
 
   # GET /works/1 or /works/1.json
