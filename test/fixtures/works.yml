@@ -3,7 +3,11 @@
 one:
   started_at: 2025-03-05 10:21:51
   project: one
+  user: one
+  date: 2025-03-05
 
 two:
   started_at: 2025-03-05 10:21:51
   project: two
+  user: one
+  date: 2025-03-05
