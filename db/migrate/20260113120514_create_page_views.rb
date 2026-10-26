@@ -6,7 +6,7 @@ class CreatePageViews < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :page_views, [:user_id, :created_at]
-    add_index :page_views, [:user_id, :path]
+    add_index :page_views, [ :user_id, :created_at ]
+    add_index :page_views, [ :user_id, :path ]
   end
 end
