@@ -3,6 +3,7 @@ require "test_helper"
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @project = projects(:one)
+    sign_in users(:one)
   end
 
   test "should get index" do
@@ -20,11 +21,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       post projects_url, params: { project: { name: @project.name } }
     end
 
-    assert_redirected_to project_url(Project.last)
+    assert_redirected_to projects_url
   end
 
   test "should show project" do
-    get project_url(@project)
+    get project_url(@project, format: :json)
     assert_response :success
   end
 
@@ -35,7 +36,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update project" do
     patch project_url(@project), params: { project: { name: @project.name } }
-    assert_redirected_to project_url(@project)
+    assert_redirected_to projects_url
   end
 
   test "should destroy project" do

@@ -3,6 +3,7 @@ require "test_helper"
 class WorksControllerTest < ActionDispatch::IntegrationTest
   setup do
     @work = works(:one)
+    sign_in users(:one)
   end
 
   test "should get index" do
@@ -17,14 +18,14 @@ class WorksControllerTest < ActionDispatch::IntegrationTest
 
   test "should create work" do
     assert_difference("Work.count") do
-      post works_url, params: { work: { project_id: @work.project_id, started_at: @work.started_at } }
+      post works_url, params: { work: { project_id: @work.project_id, date: @work.date } }
     end
 
-    assert_redirected_to work_url(Work.last)
+    assert_redirected_to works_url
   end
 
   test "should show work" do
-    get work_url(@work)
+    get work_url(@work, format: :json)
     assert_response :success
   end
 
@@ -34,8 +35,8 @@ class WorksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update work" do
-    patch work_url(@work), params: { work: { project_id: @work.project_id, started_at: @work.started_at } }
-    assert_redirected_to work_url(@work)
+    patch work_url(@work), params: { work: { project_id: @work.project_id, date: @work.date } }
+    assert_redirected_to works_url
   end
 
   test "should destroy work" do
