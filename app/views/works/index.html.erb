@@ -30,7 +30,6 @@
   <% if @works.any? %>
     <div class="space-y-8">
       <% @works.group_by(&:date).each do |date, day_works| %>
-        <!-- Day <%= date.iso8601 %> -->
         <section class="space-y-4" data-controller="day-group" data-day-group-date-value="<%= date.iso8601 %>">
           <h3>
             <button type="button" class="w-full flex flex-wrap items-center gap-x-3 gap-y-1 text-left cursor-pointer group" aria-expanded="true" aria-controls="works-day-<%= date.iso8601 %>" data-day-group-target="toggle" data-action="day-group#toggle">

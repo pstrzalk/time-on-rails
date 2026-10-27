@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Collapsible day of work sessions; the collapsed state is remembered per day in localStorage.
 export default class extends Controller {
   static targets = ["toggle", "icon", "entries"]
   static values = { date: String }
