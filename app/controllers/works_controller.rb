@@ -24,7 +24,12 @@ class WorksController < ApplicationController
     @total_pages = 1 if @total_pages < 1
     @current_page = @total_pages if @current_page > @total_pages
 
-    @works = works.order(id: :desc).limit(@per_page).offset((@current_page - 1) * @per_page)
+    @works = works.order(date: :desc, id: :desc).limit(@per_page).offset((@current_page - 1) * @per_page)
+
+    # Totals cover each whole day, including entries that fall on a neighbouring page
+    @day_totals = works.where(date: @works.map(&:date).uniq).group_by(&:date).transform_values do |day_works|
+      { sessions_count: day_works.size, total_time: day_works.sum(&:total_time) }
+    end
   end
 
   # GET /works/1 or /works/1.json
