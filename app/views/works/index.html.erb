@@ -57,13 +57,14 @@
             <div class="text-right">
               <div class="<%= work.in_progress? ? 'text-2xl font-bold text-orange-400' : 'text-xl font-semibold text-gray-300' %>"><%= time_description(work.total_time) %></div>
             </div>
-            <div class="flex gap-2">
+            <div class="flex flex-wrap gap-2">
               <% if work.in_progress? %>
                 <%= link_to "Stop", stop_work_path(work), class: "bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors", data: { turbo_method: "post" } %>
               <% else %>
                 <%= link_to "Start", start_work_path(work), class: "bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors", data: { turbo_method: "post" } %>
               <% end %>
               <%= link_to "Edit", edit_work_path(work), class: "bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors" %>
+              <%= link_to "Duplicate", duplicate_work_path(work), class: "bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors" %>
               <%= button_to "Delete", work, method: :delete, class: "bg-gray-800/50 hover:bg-gray-700/50 text-gray-400 hover:text-red-400 px-4 py-2 rounded-lg font-medium transition-colors", data: { turbo_confirm: "Are you sure?" } %>
             </div>
           </div>

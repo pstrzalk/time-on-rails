@@ -1,5 +1,5 @@
 class WorksController < ApplicationController
-  before_action :set_work, only: %i[ show edit update start stop destroy ]
+  before_action :set_work, only: %i[ show edit duplicate update start stop destroy ]
   before_action :authenticate_user!
 
   # GET /works or /works.json
@@ -42,6 +42,16 @@ class WorksController < ApplicationController
   # GET /works/1/edit
   def edit
     @project_options = Project.where(user: current_user).map { |p| [ p.name, p.id ] }
+  end
+
+  # GET /works/1/duplicate
+  def duplicate
+    @work = Work.new(project: @work.project, description: @work.description, date: Date.current)
+    @work.user = current_user
+
+    @project_options = Project.where(user: current_user).map { |p| [ p.name, p.id ] }
+
+    render :new
   end
 
   # POST /works or /works.json
